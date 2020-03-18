@@ -29,6 +29,7 @@ const GameStatusList = () => {
                         </td>
                     </tr>
                 ))}
+                {/* this is comment */}
             </tbody>
         </table>
     )

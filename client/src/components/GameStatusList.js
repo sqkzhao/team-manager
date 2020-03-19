@@ -3,8 +3,7 @@ import axios from 'axios';
 
 const GameStatusList = (props) => {
     const [players, setPlayers] = useState([])
-    const [player, setPlayer] = useState()
-    const [gameState, setGameState] = useState()
+    const [updated, setUpdated] = useState(false)
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/players')
@@ -12,26 +11,21 @@ const GameStatusList = (props) => {
                 setPlayers(res.data)
             })
             .catch(err => console.log(err))
-    }, [])
+    }, [updated])
 
-    const updateStatus = (playerId, statusType) => {
-        axios.get('http://localhost:8000/api/players/' + playerId)
+    const updateStatus = (player, value) => {
+        var statusArr = player.games
+        let i = props.id - 1
+        statusArr[i] = value
+
+        axios.put('http://localhost:8000/api/players/' + player._id, {
+            ...player,
+            games: statusArr
+        })
             .then(res => {
-                // setPlayer(res.data)
-                // setGameState(res.data.games)
-                // const gid = props.id - 1
-                // gameState.games.gid.statusType = false
-                // setPlayer({
-                //     ...player,
-                //     games: [
-                //         ...gameState,
-                //         statusType: !
-                //     ]
-                // })
+                setUpdated(!updated)
             })
-
-        // axios.put('http://localhost:8000/api/players/' + id, {
-        // })
+            .catch(err => console.log(err))
     }
 
     return(
@@ -41,22 +35,23 @@ const GameStatusList = (props) => {
                     <th>Player Name</th>
                     <th>Actions</th>
                 </tr>
-                {players.map((player, i) => (
-                    <tr key={i}>
+                {players.map((player, index) => (
+                    <tr key={index}>
                         <td>{player.name}</td>
                         <td>
-                            {player.games.map((game, index) => (
-                                (game.id == props.id) && (
-                                    <div key={index}>
-                                        {game.playing 
-                                        ? <button key={index} className="btn btn-sm btn-success mr-2">Playing</button> 
-                                        : <button key={index} className="btn btn-sm btn-secondary mr-2">Playing</button>}
-                                        {game.notplaying 
-                                        ? <button key={index} className="btn btn-sm btn-danger mr-2">Not Playing</button> 
-                                        : <button key={index} className="btn btn-sm btn-secondary mr-2">Not Playing</button>}
-                                        {game.undecided 
-                                        ? <button key={index} onClick={() => updateStatus(player._id, "undecided")} className="btn btn-sm btn-warning mr-2">Undecided</button> 
-                                        : <button key={index} className="btn btn-sm btn-secondary mr-2">Undecided</button>}
+                            {/* ["undecided", "playing", "undecided"] */}
+                            {player.games.map((status, i) => (
+                                (i+1 == props.id) && (
+                                    <div key={i}>
+                                        {status === "playing"
+                                        ? <button className="btn btn-sm btn-success mr-2">Playing</button> 
+                                        : <button onClick={() => updateStatus(player, "playing")} className="btn btn-sm btn-secondary mr-2">Playing</button>}
+                                        {status === "notplaying" 
+                                        ? <button className="btn btn-sm btn-danger mr-2">Not Playing</button> 
+                                        : <button onClick={() => updateStatus(player, "notplaying")} className="btn btn-sm btn-secondary mr-2">Not Playing</button>}
+                                        {status === "undecided"
+                                        ? <button className="btn btn-sm btn-warning mr-2">Undecided</button> 
+                                        : <button onClick={() => updateStatus(player, "undecided")} className="btn btn-sm btn-secondary mr-2">Undecided</button>}
                                     </div>
                                 )
                             ))}

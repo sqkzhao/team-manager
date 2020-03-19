@@ -9,12 +9,7 @@ const PlayerSchema = mongoose.Schema({
     position: {
         type: String
     },
-    games: [{
-        id: Number,
-        playing: Boolean,
-        notplaying: Boolean,
-        undecided: Boolean
-    }]
+    games: [String] // [game1status, game2status, game3status] => ["undecided", "playing", "undecided"]
 }, { timestamps: true })
 
 module.exports.Player = mongoose.model("Player", PlayerSchema)

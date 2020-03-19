@@ -20,22 +20,7 @@ module.exports.createPlayers = (req, res) => {
     Player.create(req.body)
         .then(player => {
             Player.findOneAndUpdate({ _id: player._id }, {
-                games: [{
-                    id: 1,
-                    playing: false,
-                    notplaying: false,
-                    undecided: true
-                },{ 
-                    id: 2,
-                    playing: false,
-                    notplaying: false,
-                    undecided: true
-                },{
-                    id: 3,
-                    playing: false,
-                    notplaying: false,
-                    undecided: true
-                }]
+                games: ["undecided", "undecided", "undecided"]
             }, { new: true })
                 .then(player => {
                     res.json(player)

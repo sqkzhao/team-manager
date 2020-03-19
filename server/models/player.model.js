@@ -8,7 +8,13 @@ const PlayerSchema = mongoose.Schema({
     },
     position: {
         type: String
-    }
+    },
+    games: [{
+        id: Number,
+        playing: Boolean,
+        notplaying: Boolean,
+        undecided: Boolean
+    }]
 }, { timestamps: true })
 
 module.exports.Player = mongoose.model("Player", PlayerSchema)

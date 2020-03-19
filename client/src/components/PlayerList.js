@@ -26,18 +26,20 @@ const PlayerList = () => {
     }
 
     return(
-        <table>
-            <tbody>
+        <table className="table table-striped mt-3">
+            <thead className="thead-dark">
                 <tr>
                     <th>Player Name</th>
                     <th>Preferred Position</th>
                     <th>Action</th>
                 </tr>
+            </thead>
+            <tbody>
                 {players.map((player, i) => (
                     <tr key={i}>
                         <td>{player.name}</td>
                         <td>{player.position}</td>
-                        <td><button onClick={deletePlayer} id={player._id} name={player.name}>Delete</button></td>
+                        <td><button onClick={deletePlayer} id={player._id} name={player.name} className="btn btn-sm btn-danger">Delete</button></td>
                     </tr>
                 ))}
             </tbody>
